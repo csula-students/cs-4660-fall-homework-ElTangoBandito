@@ -72,7 +72,6 @@ public class FileRead {
     		if (min > numbers[lineNumber][row]){
     			min = numbers[lineNumber][row];
     		}
-        }
         return min;
     }
 
@@ -82,5 +81,17 @@ public class FileRead {
     		sum += numbers[lineNumber][row];
         }
         return sum;
+    }
+
+    private int[][] converList(List<List<Integer>> arrayList) {
+        int[][] array = new int[arrayList.size()][];
+        for (int i = 0; i < arrayList.size(); i++) {
+            List<Integer> row = arrayList.get(i);
+            array[i] = new int[row.size()];
+            for (int j = 0; j < row.size(); j ++) {
+                array[i][j] = row.get(j);
+            }
+        }
+        return array;
     }
 }
