@@ -19,7 +19,8 @@ import java.util.*;
  */
 public class AdjacencyList implements Representation {
     private Map<Node, Collection<Edge>> adjacencyList;
-
+    private Multimap<Node, Edge> mmap;
+    private List<Node> nodeList;
     public AdjacencyList(File file) {
         try {
             FileReader fileReader = new FileReader(file);
@@ -28,22 +29,27 @@ public class AdjacencyList implements Representation {
             String numberOfNodes = br.readLine();
             int nod = Integer.valueOf(numberOfNodes);
 
-            Multimap<Node, Edge> m = ArrayListMultimap.create();
-            for(int i = 0; i < nod; i++){
-                Node temp = new Node(i);
-                m.put(temp, null);
+            mmap = ArrayListMultimap.create();
+            nodeList = new ArrayList<Node>();
+            for(int i = 0; i < nod; i++) {
+                Node tempNode = new Node(i);
+                nodeList.add(tempNode);
             }
-            /*
+            String line = br.readLine();
             while(line != null){
                 List<Integer> tempList = new ArrayList();
-                for(String number: line.split(" ")){
+                for(String number: line.split(":")){
                     int digit = Integer.parseInt(number);
                     tempList.add(digit);
                 }
-                numberList.add((ArrayList) tempList);
+                Node fromNode = new Node(tempList.get(0));
+                Node toNode = new Node(tempList.get(1));
+                Edge curEdge = new Edge(fromNode, toNode, tempList.get(2));
+                mmap.put(fromNode, curEdge);
                 line = br.readLine();
             }
-            */
+
+
         }
         catch(IOException e) {
             e.printStackTrace();
@@ -51,36 +57,89 @@ public class AdjacencyList implements Representation {
     }
 
     public AdjacencyList() {
-
     }
 
     @Override
     public boolean adjacent(Node x, Node y) {
-        return false;
+        boolean result = false;
+        List<Edge> edgeList = new ArrayList<Edge>();
+        edgeList.addAll(mmap.get(x));
+        for(Edge e: edgeList){
+            if (y.equals(e.getTo())){
+                result = true;
+            };
+        }
+        return result;
     }
 
     @Override
     public List<Node> neighbors(Node x) {
-        return null;
+        List<Node> result = new ArrayList<Node>();
+        for (Edge e: mmap.get(x)){
+            result.add(e.getTo());
+        }
+        return result;
     }
 
     @Override
     public boolean addNode(Node x) {
-        return false;
+        if (nodeList.contains(x)){
+            return false;
+        }
+        else{
+            nodeList.add(x);
+            return true;
+        }
     }
 
     @Override
     public boolean removeNode(Node x) {
+        if (nodeList.contains(x)){
+            nodeList.remove(x);
+            mmap.removeAll(x);
+            Map<Node, Edge> toBeRemoved = new HashMap<Node, Edge>();
+            for (Map.Entry entry: mmap.entries()){
+                Edge e = (Edge) entry.getValue();
+                if (e.getTo().equals(x)){
+                    Node n = (Node) entry.getKey();
+                    toBeRemoved.put(n, e);
+                }
+            }
+            for (Node key: toBeRemoved.keySet()){
+                mmap.remove(key, toBeRemoved.get(key));
+            }
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean addEdge(Edge x) {
+        Node fromNode = x.getFrom();
+        Node toNode = x.getTo();
+        if(nodeList.contains(fromNode) && nodeList.contains(toNode)){
+
+            if(!mmap.get(fromNode).contains(x)){
+                mmap.put(fromNode, x);
+                return true;
+            };
+
+        }
         return false;
     }
 
     @Override
     public boolean removeEdge(Edge x) {
+        Node fromNode = x.getFrom();
+        Node toNode = x.getTo();
+        if(nodeList.contains(fromNode) && nodeList.contains(toNode)){
+
+            if(mmap.get(fromNode).contains(x)){
+                mmap.remove(fromNode, x);
+                return true;
+            };
+
+        }
         return false;
     }
 
