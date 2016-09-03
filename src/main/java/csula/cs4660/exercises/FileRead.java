@@ -68,10 +68,12 @@ public class FileRead {
 
     public int min(int lineNumber) {
     	int min = numbers[lineNumber][0];
-    	for (int row = 1; row<numbers[lineNumber].length; row++){
-    		if (min > numbers[lineNumber][row]){
-    			min = numbers[lineNumber][row];
-    		}
+    	for (int row = 1; row<numbers[lineNumber].length; row++) {
+            if (min > numbers[lineNumber][row]) {
+                min = numbers[lineNumber][row];
+            }
+
+        }
         return min;
     }
 
