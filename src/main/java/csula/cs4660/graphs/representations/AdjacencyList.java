@@ -21,7 +21,7 @@ public class AdjacencyList implements Representation {
     private Map<Node, Collection<Edge>> adjacencyList;
     private Multimap<Node, Edge> mmap;
     private List<Node> nodeList;
-
+    
     public AdjacencyList(File file) {
         try {
             FileReader fileReader = new FileReader(file);
