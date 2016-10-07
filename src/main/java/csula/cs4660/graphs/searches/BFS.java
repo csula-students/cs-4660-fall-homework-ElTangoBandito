@@ -19,9 +19,28 @@ public class BFS implements SearchStrategy {
         Queue<Node> nodeQueue = new LinkedList<Node>();
         List<Node> visited = new ArrayList<Node>();
         List<Edge> result = new ArrayList<Edge>();
-        Queue<Edge> accum = new LinkedList<Edge>();
+        //Queue<Edge> accum = new LinkedList<Edge>();
         nodeQueue.add(source);
-        graph.recursiveBFS(source, dist, nodeQueue, visited, result, accum);
+        while (!nodeQueue.isEmpty()){
+            Node currentNode = nodeQueue.poll();
+            if (currentNode.equals(dist)) {
+                visited.add(currentNode);
+                break;
+            }
+            if (!visited.contains(currentNode)){
+                visited.add(currentNode);
+                List<Node> childs = graph.neighbors(currentNode);
+                for (Node node: childs){
+                    if (!visited.contains(node)){
+                        nodeQueue.add(node);
+                    }
+                }
+            }
+        }
+        System.out.println(visited);
+
+
+        //graph.recursiveBFS(source, dist, nodeQueue, visited, result, accum);
         return result;
     }
 }

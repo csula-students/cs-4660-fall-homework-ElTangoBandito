@@ -146,7 +146,13 @@ public class AdjacencyList implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        int result = 0;
+        for (Edge e: mmap.get(from)){
+            if (e.getTo().equals(to)){
+                result = e.getValue();
+            }
+        }
+        return result;
     }
 
     @Override
