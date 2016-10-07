@@ -126,4 +126,17 @@ public class ObjectOriented implements Representation {
     public Optional<Node> getNode(int index) {
         return null;
     }
+
+    @Override
+    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){
+        if (currentNode != destination){
+            if(!visited.contains(currentNode)) {
+                nodeQueue.add(currentNode);
+                System.out.println(nodeQueue);
+                System.out.println("Heyooo");
+            }
+
+        }
+
+    }
 }

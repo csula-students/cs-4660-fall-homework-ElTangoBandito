@@ -6,6 +6,8 @@ import csula.cs4660.graphs.Node;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Interface to define common behaviors across different representations
@@ -65,4 +67,6 @@ public interface Representation {
     Optional<Node> getNode(int index);
 
     String toString();
+
+    void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> accumulator, Queue<Edge> accum);
 }

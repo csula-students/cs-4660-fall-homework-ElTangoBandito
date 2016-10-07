@@ -7,9 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Adjacency matrix in a sense store the nodes in two dimensional array
@@ -168,5 +166,17 @@ public class AdjacencyMatrix implements Representation {
     @Override
     public Optional<Node> getNode(int index) {
         return null;
+    }
+
+    @Override
+    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){
+        if (currentNode != destination){
+            if(!visited.contains(currentNode)) {
+                nodeQueue.add(currentNode);
+                System.out.println(nodeQueue);
+                System.out.println("Heyooo");
+            }
+
+        }
     }
 }

@@ -5,6 +5,8 @@ import csula.cs4660.graphs.searches.SearchStrategy;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Graph {
     private final Representation strategy;
@@ -89,6 +91,8 @@ public class Graph {
     public List<Edge> search(SearchStrategy strategy, Node source, Node dist) {
         return strategy.search(this, source, dist);
     }
+
+    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){strategy.recursiveBFS(currentNode, destination, nodeQueue, visited, result, accum);}
 
     @Override
     public String toString() {

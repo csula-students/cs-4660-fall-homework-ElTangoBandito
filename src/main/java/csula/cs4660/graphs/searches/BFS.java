@@ -5,6 +5,10 @@ import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Breadth first search
@@ -12,6 +16,12 @@ import java.util.List;
 public class BFS implements SearchStrategy {
     @Override
     public List<Edge> search(Graph graph, Node source, Node dist) {
-        return null;
+        Queue<Node> nodeQueue = new LinkedList<Node>();
+        List<Node> visited = new ArrayList<Node>();
+        List<Edge> result = new ArrayList<Edge>();
+        Queue<Edge> accum = new LinkedList<Edge>();
+        nodeQueue.add(source);
+        graph.recursiveBFS(source, dist, nodeQueue, visited, result, accum);
+        return result;
     }
 }
