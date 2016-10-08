@@ -31,12 +31,16 @@ public class BFS implements SearchStrategy {
                 //System.out.println(currentNode);
                 List<Node> childs = graph.neighbors(currentNode);
                 for (Node node: childs){
-                    nodeMap.put(node, currentNode);
+                    if(!nodeQueue.contains(node)){
+                        nodeMap.put(node, currentNode);
+                    }
+                    //nodeMap.put(node, currentNode);
                     if(node.equals(dist)){
                         nodeQueue.clear();
                         break;
                     }
                     nodeQueue.add(node);
+                    //nodeQueue.add(node);
                 }
             }
         }
@@ -50,7 +54,6 @@ public class BFS implements SearchStrategy {
             tracerNode = parentNode;
         }
 
-        System.out.println(result);
         return Lists.reverse(result);
 
 
