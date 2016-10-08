@@ -20,38 +20,20 @@ public class DFS implements SearchStrategy {
 
         recursiveDFS(graph, source, dist, result, accum, visited);
         return result;
-        /*
-        accum.push(source);
-
-        while(!accum.isEmpty()){
-            Node currentNode = accum.pop();
-            if (currentNode.equals(dist)){
-                break;
-            }
-            if (!visited.contains(currentNode)){
-                List<Node> childs = graph.neighbors(currentNode);
-                for(Node node: childs){
-
-                }
-            }
-        }
-
-        return null;
-        */
     }
 
     public void recursiveDFS(Graph graph, Node currentNode, Node dist, List<Edge> result, Stack<Node> accum, List<Node> visited){
         if(currentNode.equals(dist)){
             accum.add(currentNode);
-            System.out.println(accum);
+            if (accum.get(accum.size()-1).equals(accum.get(accum.size()-2))){
+                accum.remove(accum.size()-1);
+            }
+            result.clear();
             for(int i = 1; i < accum.size(); i++){
                 Edge e = new Edge(accum.get(i - 1), accum.get(i), graph.distance(accum.get(i-1), accum.get(i)));
                 result.add(e);
 
             }
-            System.out.println(result);
-            //Why is it running twice when the results are correct???
-            result.add(new Edge(currentNode, currentNode, 1));
             return;
         }
         if (!(result.size() > 0)) {

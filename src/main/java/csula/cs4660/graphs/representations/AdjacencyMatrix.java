@@ -160,7 +160,7 @@ public class AdjacencyMatrix implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        return adjacencyMatrix[(int) from.getData()][(int) to.getData()];
     }
 
     @Override
