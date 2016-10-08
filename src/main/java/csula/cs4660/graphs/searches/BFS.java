@@ -54,8 +54,9 @@ public class BFS implements SearchStrategy {
         }
         System.out.println("Whyyyy");
         //result = Lists.reverse(result);
-        return result;
-        //return Lists.reverse(result);
+        //return result;
+        System.out.println(result);
+        return Lists.reverse(result);
         /*
         //reverse result
         List<Edge> realResult = new ArrayList<Edge>();

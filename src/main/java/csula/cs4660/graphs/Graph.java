@@ -92,8 +92,6 @@ public class Graph {
         return strategy.search(this, source, dist);
     }
 
-    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){strategy.recursiveBFS(currentNode, destination, nodeQueue, visited, result, accum);}
-
     @Override
     public String toString() {
         return strategy.toString();

@@ -67,6 +67,4 @@ public interface Representation {
     Optional<Node> getNode(int index);
 
     String toString();
-
-    void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> accumulator, Queue<Edge> accum);
 }
