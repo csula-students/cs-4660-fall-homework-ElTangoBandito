@@ -5,6 +5,8 @@ import csula.cs4660.graphs.searches.SearchStrategy;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Graph {
     private final Representation strategy;

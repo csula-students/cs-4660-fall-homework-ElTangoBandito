@@ -119,11 +119,19 @@ public class ObjectOriented implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        int result = 0;
+        VertexRelation vt = rmap.get(from);
+        for(Edge e :vt.getEdgeList()){
+            if (e.getTo().equals(to)){
+                result = e.getValue();
+            }
+        }
+        return result;
     }
 
     @Override
     public Optional<Node> getNode(int index) {
         return null;
     }
+
 }

@@ -7,9 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Adjacency matrix in a sense store the nodes in two dimensional array
@@ -45,7 +43,7 @@ public class AdjacencyMatrix implements Representation {
                 int from = tempList.get(0);
                 int to = tempList.get(1);
                 //We don't care for weight for now
-                adjacencyMatrix[from][to] = 1;
+                adjacencyMatrix[from][to] = tempList.get(2);
                 line = br.readLine();
 
             }
@@ -64,7 +62,7 @@ public class AdjacencyMatrix implements Representation {
     public boolean adjacent(Node x, Node y) {
         int row = (int) x.getData();
         int col = (int) y.getData();
-        if (adjacencyMatrix[row][col] == 1){
+        if (adjacencyMatrix[row][col] != 0){
             return true;
         };
         return false;
@@ -77,7 +75,7 @@ public class AdjacencyMatrix implements Representation {
         int row = (int) x.getData();
         if (nodeList.contains(x)){
             for (int i = 0; i < max; i++){
-                if(adjacencyMatrix[row][i] == 1){
+                if(adjacencyMatrix[row][i] != 0){
                     result.add(nodeList.get(i));
                 }
             }
@@ -133,11 +131,11 @@ public class AdjacencyMatrix implements Representation {
         if (nodeList.contains(x.getFrom()) && nodeList.contains(x.getTo())){
             int row = (int) x.getFrom().getData();
             int col = (int) x.getTo().getData();
-            if (adjacencyMatrix[row][col] == 1) {
+            if (adjacencyMatrix[row][col] != 0) {
                 return false;
             }
             else {
-                adjacencyMatrix[row][col] = 1;
+                adjacencyMatrix[row][col] = x.getValue();
                 return true;
             }
         }
@@ -162,11 +160,12 @@ public class AdjacencyMatrix implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        return adjacencyMatrix[(int) from.getData()][(int) to.getData()];
     }
 
     @Override
     public Optional<Node> getNode(int index) {
         return null;
     }
+
 }
