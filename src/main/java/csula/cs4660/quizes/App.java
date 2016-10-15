@@ -5,6 +5,7 @@ import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
 import csula.cs4660.graphs.representations.Representation;
 import csula.cs4660.graphs.searches.BFS;
+import csula.cs4660.graphs.searches.DijkstraSearch;
 import csula.cs4660.quizes.models.State;
 
 import java.util.ArrayList;
@@ -51,6 +52,19 @@ public class App {
             State tempState = (State) tempNode.getData();
             System.out.println(tempState.getLocation().getName());
         }
+
+        result = graph.search(new DijkstraSearch(), fromNode, toNode);
+        System.out.println("Dijkstra Results: ");
+        System.out.println("============================================");
+        System.out.println(startState.getLocation().getName());
+        int totalCost = 0;
+        for (Edge e: result){
+            Node tempNode = e.getTo();
+            State tempState = (State) tempNode.getData();
+            totalCost += e.getValue();
+            System.out.println(tempState.getLocation().getName() + " cost: " + String.valueOf(e.getValue()));
+        }
+        System.out.println("Total cost: " + totalCost);
 
 
         // to get an edge between state to its neighbor, you can call stateTransition
@@ -120,7 +134,5 @@ public class App {
         System.out.println(numberOfNodes);
         System.out.println("Number of actual edges in graph:");
         System.out.println(edges);
-        System.out.println("Number of edges in graph:");
-        System.out.println(possibleEdges);
     }
 }

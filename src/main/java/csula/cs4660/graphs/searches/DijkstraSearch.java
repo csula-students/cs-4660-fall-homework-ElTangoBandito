@@ -41,7 +41,9 @@ public class DijkstraSearch implements SearchStrategy {
 
                         if(nodeMap.containsKey(node)){
                             int existingDistance = nodeMap.get(node).getDistance();
-                            if (currentDistance < existingDistance){
+                            if (currentDistance > existingDistance){
+                            //original
+                            //if (currentDistance < existingDistance){
                                 nodeMap.put(node, new DNode(currentNode, currentDistance));
                             }
                         }

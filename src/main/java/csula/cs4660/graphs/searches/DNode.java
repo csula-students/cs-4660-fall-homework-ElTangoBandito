@@ -25,6 +25,7 @@ public class DNode implements Comparable<DNode>{
 
     @Override
     public int compareTo(DNode node){
-        return distance - node.distance;
+        return -(distance - node.distance);
+        // - to flip the result for the quiz
     }
 }
