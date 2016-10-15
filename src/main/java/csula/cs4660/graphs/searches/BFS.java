@@ -28,7 +28,10 @@ public class BFS implements SearchStrategy {
             }
             if (!visited.contains(currentNode)){
                 visited.add(currentNode);
-                //System.out.println(currentNode);
+
+                System.out.println(nodeMap);
+                System.out.println(nodeQueue.size());
+
                 List<Node> childs = graph.neighbors(currentNode);
                 for (Node node: childs){
                     if(!nodeQueue.contains(node)){
@@ -44,7 +47,6 @@ public class BFS implements SearchStrategy {
                 }
             }
         }
-
         //trace back the child-parent map
         Node tracerNode = dist;
         while(!tracerNode.equals(source)){
@@ -53,7 +55,6 @@ public class BFS implements SearchStrategy {
             result.add(e);
             tracerNode = parentNode;
         }
-
         return Lists.reverse(result);
 
 

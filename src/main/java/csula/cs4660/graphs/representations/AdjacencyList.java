@@ -58,6 +58,8 @@ public class AdjacencyList implements Representation {
     }
 
     public AdjacencyList() {
+        nodeList = new ArrayList<Node>();
+        mmap = ArrayListMultimap.create();
     }
 
     @Override
@@ -119,7 +121,6 @@ public class AdjacencyList implements Representation {
         Node fromNode = x.getFrom();
         Node toNode = x.getTo();
         if(nodeList.contains(fromNode) && nodeList.contains(toNode)){
-
             if(!mmap.get(fromNode).contains(x)){
                 mmap.put(fromNode, x);
                 return true;
