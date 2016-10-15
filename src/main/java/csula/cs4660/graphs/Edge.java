@@ -65,4 +65,5 @@ public class Edge {
         result = 31 * result + getValue();
         return result;
     }
+
 }
