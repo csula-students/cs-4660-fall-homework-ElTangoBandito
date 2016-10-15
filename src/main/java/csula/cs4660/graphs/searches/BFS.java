@@ -20,7 +20,11 @@ public class BFS implements SearchStrategy {
 
         //Queue<Edge> accum = new LinkedList<Edge>();
         nodeQueue.add(source);
+        int iter = 0;
         while (!nodeQueue.isEmpty()){
+            iter++;
+            //System.out.println("Itteration: ");
+            //System.out.println(iter);
             Node currentNode = nodeQueue.poll();
             if (currentNode.equals(dist)) {
                 visited.add(currentNode);
@@ -29,25 +33,32 @@ public class BFS implements SearchStrategy {
             if (!visited.contains(currentNode)){
                 visited.add(currentNode);
 
-                System.out.println(nodeMap);
-                System.out.println(nodeQueue.size());
-
                 List<Node> childs = graph.neighbors(currentNode);
+                //System.out.println("Childs");
+                //System.out.println(childs.size());
+
                 for (Node node: childs){
                     if(!nodeQueue.contains(node)){
-                        nodeMap.put(node, currentNode);
+                        if(!visited.contains(node)){
+                            nodeMap.put(node, currentNode);
+                            nodeQueue.add(node);
+                        }
                     }
                     //nodeMap.put(node, currentNode);
                     if(node.equals(dist)){
                         nodeQueue.clear();
                         break;
                     }
-                    nodeQueue.add(node);
+                    //nodeQueue.add(node);
                     //nodeQueue.add(node);
                 }
             }
         }
         //trace back the child-parent map
+        System.out.println("Total Iterations:");
+        System.out.println(iter);
+        System.out.println("Tracer Map Size: ");
+        System.out.println(nodeMap.size());
         Node tracerNode = dist;
         while(!tracerNode.equals(source)){
             Node parentNode = nodeMap.get(tracerNode);
