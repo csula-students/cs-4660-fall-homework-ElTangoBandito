@@ -35,7 +35,7 @@ public class DijkstraSearch implements SearchStrategy {
                 List<Node> childs = graph.neighbors(currentNode);
                 for (Node node: childs){
                     int currentDistance = currentDNode.getDistance() + graph.distance(currentNode, node);
-                    if(!nodeQueue.contains(node)){
+                    if(!nodeQueue.contains(node) && !visited.contains(node)){
                         nodeQueue.offer(new DNode(node, currentDistance));
 
 
