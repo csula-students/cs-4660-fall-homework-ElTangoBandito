@@ -7,11 +7,8 @@ import csula.cs4660.graphs.Node;
 
 import java.io.BufferedReader;
 import java.io.File;
-<<<<<<< HEAD
 import java.io.FileReader;
 import java.io.IOException;
-=======
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
 import java.util.*;
 
 /**
@@ -25,7 +22,6 @@ public class AdjacencyList implements Representation {
     private Multimap<Node, Edge> mmap;
     private List<Node> nodeList;
 
-<<<<<<< HEAD
     public AdjacencyList(File file) {
         try {
             FileReader fileReader = new FileReader(file);
@@ -62,13 +58,7 @@ public class AdjacencyList implements Representation {
     }
 
     public AdjacencyList() {
-=======
-    protected AdjacencyList(File file) {
-    }
 
-    protected AdjacencyList() {
-
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
     }
 
     @Override
@@ -157,14 +147,19 @@ public class AdjacencyList implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        int result = 0;
+        for (Edge e: mmap.get(from)){
+            if (e.getTo().equals(to)){
+                result = e.getValue();
+            }
+        }
+        return result;
     }
 
     @Override
     public Optional<Node> getNode(int index) {
         return null;
     }
-
     @Override
     public Optional<Node> getNode(Node node) {
         Iterator<Node> iterator = adjacencyList.keySet().iterator();
@@ -177,4 +172,25 @@ public class AdjacencyList implements Representation {
         }
         return result;
     }
+/*
+    @Override
+    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){
+        if (nodeQueue.isEmpty()){
+            return;
+        }
+        Node current = nodeQueue.poll();
+        if(!visited.contains(current)) {
+            visited.add(current);
+            for (Edge e : mmap.get(current)) {
+                Node nextNode = e.getTo();
+                if (!visited.contains(nextNode)) {
+                    System.out.println(e);
+                    nodeQueue.add(nextNode);
+                }
+            }
+        }
+        //System.out.println(current);
+        recursiveBFS(currentNode, destination, nodeQueue, visited, result, accum);
+    }
+    */
 }

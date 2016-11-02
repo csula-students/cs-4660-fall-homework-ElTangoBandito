@@ -5,16 +5,13 @@ import csula.cs4660.graphs.Node;
 
 import java.io.BufferedReader;
 import java.io.File;
-<<<<<<< HEAD
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-=======
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
->>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
 
 /**
  * Object oriented representation of graph is using OOP approach to store nodes
@@ -124,7 +121,14 @@ public class ObjectOriented implements Representation {
 
     @Override
     public int distance(Node from, Node to) {
-        return 0;
+        int result = 0;
+        VertexRelation vt = rmap.get(from);
+        for(Edge e :vt.getEdgeList()){
+            if (e.getTo().equals(to)){
+                result = e.getValue();
+            }
+        }
+        return result;
     }
 
     @Override

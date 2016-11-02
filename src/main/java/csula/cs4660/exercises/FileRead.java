@@ -72,7 +72,6 @@ public class FileRead {
             if (min > numbers[lineNumber][row]) {
                 min = numbers[lineNumber][row];
             }
-
         }
         return min;
     }
