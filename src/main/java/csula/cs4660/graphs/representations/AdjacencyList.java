@@ -7,8 +7,11 @@ import csula.cs4660.graphs.Node;
 
 import java.io.BufferedReader;
 import java.io.File;
+<<<<<<< HEAD
 import java.io.FileReader;
 import java.io.IOException;
+=======
+>>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
 import java.util.*;
 
 /**
@@ -22,6 +25,7 @@ public class AdjacencyList implements Representation {
     private Multimap<Node, Edge> mmap;
     private List<Node> nodeList;
 
+<<<<<<< HEAD
     public AdjacencyList(File file) {
         try {
             FileReader fileReader = new FileReader(file);
@@ -58,6 +62,13 @@ public class AdjacencyList implements Representation {
     }
 
     public AdjacencyList() {
+=======
+    protected AdjacencyList(File file) {
+    }
+
+    protected AdjacencyList() {
+
+>>>>>>> 959fbb379b17aba053f911cd4a7ae7ce8efe757c
     }
 
     @Override
@@ -152,5 +163,18 @@ public class AdjacencyList implements Representation {
     @Override
     public Optional<Node> getNode(int index) {
         return null;
+    }
+
+    @Override
+    public Optional<Node> getNode(Node node) {
+        Iterator<Node> iterator = adjacencyList.keySet().iterator();
+        Optional<Node> result = Optional.empty();
+        while (iterator.hasNext()) {
+            Node next = iterator.next();
+            if (next.equals(node)) {
+                result = Optional.of(next);
+            }
+        }
+        return result;
     }
 }
