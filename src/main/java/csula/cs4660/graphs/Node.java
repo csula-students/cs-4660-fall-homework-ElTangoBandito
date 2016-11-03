@@ -1,5 +1,7 @@
 package csula.cs4660.graphs;
 
+import csula.cs4660.games.models.MiniMaxState;
+
 /**
  * The fundamental class to hold data
  *
@@ -7,7 +9,7 @@ package csula.cs4660.graphs;
  * http://www.tutorialspoint.com/java/java_generics.htm
  */
 public class Node<T> {
-    private final T data;
+    private T data;
 
     public Node(T data) {
         this.data = data;
@@ -15,6 +17,10 @@ public class Node<T> {
 
     public T getData() {
         return data;
+    }
+
+    public void setNode(T dataIn){
+        data = dataIn;
     }
 
     @Override
@@ -39,4 +45,5 @@ public class Node<T> {
     public int hashCode() {
         return getData() != null ? getData().hashCode() : 0;
     }
+
 }

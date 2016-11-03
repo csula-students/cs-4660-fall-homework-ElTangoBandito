@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ObjectOriented implements Representation {
     private Collection<Node> nodes;
     private Collection<Edge> edges;
-    private HashMap<Node, VertexRelation> rmap;
+    private HashMap<Node, VertexRelation> rmap = new HashMap<Node, VertexRelation>();
 
     public ObjectOriented(File file) {
         try {
@@ -29,7 +29,7 @@ public class ObjectOriented implements Representation {
 
             String numberOfNodes = br.readLine();
             int nod = Integer.valueOf(numberOfNodes);
-            rmap = new HashMap<Node, VertexRelation>();
+            //rmap = new HashMap<Node, VertexRelation>();
             for (int i = 0; i < nod; i++){
                 Node tempNode = new Node(i);
                 VertexRelation v = new VertexRelation(tempNode);
@@ -138,7 +138,7 @@ public class ObjectOriented implements Representation {
 
     @Override
     public Optional<Node> getNode(Node node) {
-        Iterator<Node> iterator = nodes.iterator();
+        Iterator<Node> iterator = rmap.keySet().iterator();
         Optional<Node> result = Optional.empty();
         while (iterator.hasNext()) {
             Node next = iterator.next();
