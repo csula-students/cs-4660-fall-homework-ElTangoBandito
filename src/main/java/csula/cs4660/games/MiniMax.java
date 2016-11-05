@@ -16,19 +16,26 @@ public class MiniMax {
         System.out.println(test.getValue());
         */
         minMax(graph, root, depth, max);
+        /*
+        for (int i = 0; i < 15; i++){
+            MiniMaxState mx = (MiniMaxState) graph.getNode(new Node<>(new MiniMaxState(i, 0))).get().getData();
+            System.out.println(mx.getIndex() + ": " + mx.getValue());
+        }
+        */
         return getNextMove(graph, root, max);
     }
 
     public static Node getNextMove(Graph graph, Node root, boolean max){
         Node result = new Node<>(new MiniMaxState(0, 0));
+        root = graph.getNode(root).get();
         if (max){
             int bestValue = Integer.MIN_VALUE;
             for (Node node : graph.neighbors(root)) {
-                MiniMaxState currentState = (MiniMaxState)node.getData();
+                MiniMaxState currentState = (MiniMaxState) graph.getNode(node).get().getData();
                 bestValue = Math.max(currentState.getValue(), bestValue);
             }
             for (Node node : graph.neighbors(root)) {
-                MiniMaxState currentState = (MiniMaxState)node.getData();
+                MiniMaxState currentState = (MiniMaxState) graph.getNode(node).get().getData();
                 if(bestValue == currentState.getValue()){
                     result = node;
                 }
@@ -47,10 +54,12 @@ public class MiniMax {
                 }
             }
         }
+        result = graph.getNode(result).get();
         return result;
     }
 
     public static int minMax(Graph graph, Node root, Integer depth, Boolean max){
+        root = graph.getNode(root).get();
         if(depth == 0){
             MiniMaxState miniMax = (MiniMaxState) root.getData();
             return miniMax.getValue();
@@ -72,7 +81,7 @@ public class MiniMax {
                 int bestValue = Integer.MAX_VALUE;
                 for (Node node : graph.neighbors(root)) {
                     int currentDepth = depth - 1;
-                    int nextValue = minMax(graph, node, currentDepth, false);
+                    int nextValue = minMax(graph, node, currentDepth, true);
                     bestValue = Math.min(bestValue, nextValue);
                 }
                 MiniMaxState currentState = (MiniMaxState) root.getData();

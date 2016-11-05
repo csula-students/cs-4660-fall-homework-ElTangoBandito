@@ -5,22 +5,38 @@ import csula.cs4660.graphs.Graph;
 import csula.cs4660.graphs.Node;
 
 public class AlphaBeta {
-    public static Node getBestMove(Graph graph, Node source, Integer depth, Integer alpha, Integer beta, Boolean max) {
+    public static Node getBestMove(Graph graph, Node root, Integer depth, Integer alpha, Integer beta, Boolean max) {
         // TODO: implement your alpha beta pruning algorithm here
-        minMax(graph, source, depth, max);
-        return getNextMove(graph, source, max);
+        // TODO: implement minimax to retrieve best move
+        // NOTE: you should mutate graph and node as you traverse and update value
+        /*
+        Node node = graph.getNode(root).get();
+        node.setNode(new MiniMaxState(0, 100));
+        MiniMaxState mini= (MiniMaxState)node.getData();
+        MiniMaxState test = (MiniMaxState)graph.getNode(new Node<>(new MiniMaxState(0, 100))).get().getData();
+        System.out.println(test.getValue());
+        */
+        minMax(graph, root, depth, alpha, beta, max);
+        /*
+        for (int i = 0; i < 15; i++){
+            MiniMaxState mx = (MiniMaxState) graph.getNode(new Node<>(new MiniMaxState(i, 0))).get().getData();
+            System.out.println(mx.getIndex() + ": " + mx.getValue());
+        }
+        */
+        return getNextMove(graph, root, max);
     }
 
     public static Node getNextMove(Graph graph, Node root, boolean max){
         Node result = new Node<>(new MiniMaxState(0, 0));
+        root = graph.getNode(root).get();
         if (max){
             int bestValue = Integer.MIN_VALUE;
             for (Node node : graph.neighbors(root)) {
-                MiniMaxState currentState = (MiniMaxState)node.getData();
+                MiniMaxState currentState = (MiniMaxState) graph.getNode(node).get().getData();
                 bestValue = Math.max(currentState.getValue(), bestValue);
             }
             for (Node node : graph.neighbors(root)) {
-                MiniMaxState currentState = (MiniMaxState)node.getData();
+                MiniMaxState currentState = (MiniMaxState) graph.getNode(node).get().getData();
                 if(bestValue == currentState.getValue()){
                     result = node;
                 }
@@ -39,10 +55,12 @@ public class AlphaBeta {
                 }
             }
         }
+        result = graph.getNode(result).get();
         return result;
     }
 
-    public static int minMax(Graph graph, Node root, Integer depth, Boolean max){
+    public static int minMax(Graph graph, Node root, Integer depth, Integer alpha, Integer beta, Boolean max){
+        root = graph.getNode(root).get();
         if(depth == 0){
             MiniMaxState miniMax = (MiniMaxState) root.getData();
             return miniMax.getValue();
@@ -52,8 +70,12 @@ public class AlphaBeta {
                 int bestValue = Integer.MIN_VALUE;
                 for (Node node : graph.neighbors(root)) {
                     int currentDepth = depth - 1;
-                    int nextValue = minMax(graph, node, currentDepth, false);
+                    int nextValue = minMax(graph, node, currentDepth, alpha, beta, false);
                     bestValue = Math.max(bestValue, nextValue);
+                    alpha = Math.max(alpha, bestValue);
+                    if (beta <= alpha){
+                        break;
+                    }
                 }
                 MiniMaxState currentState = (MiniMaxState) root.getData();
                 MiniMaxState newState = new MiniMaxState(currentState.getIndex(), bestValue);
@@ -64,8 +86,12 @@ public class AlphaBeta {
                 int bestValue = Integer.MAX_VALUE;
                 for (Node node : graph.neighbors(root)) {
                     int currentDepth = depth - 1;
-                    int nextValue = minMax(graph, node, currentDepth, false);
+                    int nextValue = minMax(graph, node, currentDepth, alpha, beta,  true);
                     bestValue = Math.min(bestValue, nextValue);
+                    beta = Math.min(beta, bestValue);
+                    if (beta <= alpha){
+                        break;
+                    }
                 }
                 MiniMaxState currentState = (MiniMaxState) root.getData();
                 MiniMaxState newState = new MiniMaxState(currentState.getIndex(), bestValue);
