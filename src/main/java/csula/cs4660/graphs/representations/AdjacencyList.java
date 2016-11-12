@@ -159,25 +159,17 @@ public class AdjacencyList implements Representation {
     public Optional<Node> getNode(int index) {
         return null;
     }
-/*
+
     @Override
-    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){
-        if (nodeQueue.isEmpty()){
-            return;
-        }
-        Node current = nodeQueue.poll();
-        if(!visited.contains(current)) {
-            visited.add(current);
-            for (Edge e : mmap.get(current)) {
-                Node nextNode = e.getTo();
-                if (!visited.contains(nextNode)) {
-                    System.out.println(e);
-                    nodeQueue.add(nextNode);
-                }
+    public Optional<Node> getNode(Node node) {
+        Iterator<Node> iterator = adjacencyList.keySet().iterator();
+        Optional<Node> result = Optional.empty();
+        while (iterator.hasNext()) {
+            Node next = iterator.next();
+            if (next.equals(node)) {
+                result = Optional.of(next);
             }
         }
-        //System.out.println(current);
-        recursiveBFS(currentNode, destination, nodeQueue, visited, result, accum);
+        return result;
     }
-    */
 }
