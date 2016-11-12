@@ -58,6 +58,7 @@ public class AdjacencyList implements Representation {
     }
 
     public AdjacencyList() {
+
     }
 
     @Override
@@ -172,4 +173,25 @@ public class AdjacencyList implements Representation {
         }
         return result;
     }
+/*
+    @Override
+    public void recursiveBFS(Node currentNode, Node destination, Queue<Node> nodeQueue, List<Node> visited, List<Edge> result, Queue<Edge> accum){
+        if (nodeQueue.isEmpty()){
+            return;
+        }
+        Node current = nodeQueue.poll();
+        if(!visited.contains(current)) {
+            visited.add(current);
+            for (Edge e : mmap.get(current)) {
+                Node nextNode = e.getTo();
+                if (!visited.contains(nextNode)) {
+                    System.out.println(e);
+                    nodeQueue.add(nextNode);
+                }
+            }
+        }
+        //System.out.println(current);
+        recursiveBFS(currentNode, destination, nodeQueue, visited, result, accum);
+    }
+    */
 }
