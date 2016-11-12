@@ -9,7 +9,7 @@ import java.math.*;
  * the standard input according to the problem statement.
  **/
 class Player {
-
+    private static long startTime;
     private static int[][] board = new int[30][20];
     private static int myCurX;
     private static int myCurY;
@@ -26,6 +26,7 @@ class Player {
         }
         // game loop
         while (true) {
+            startTime = System.currentTimeMillis();
             int N = in.nextInt(); // total number of players (2 to 4).
             int P = in.nextInt(); // your player number (0 to 3).
             for (int i = 0; i < N; i++) {
@@ -38,8 +39,8 @@ class Player {
                 if(i == P){
                     myCurX = X1;
                     myCurY = Y1;
-                    System.err.println(X1);
-                    System.err.println(Y1);
+                    //System.err.println(X1);
+                    //System.err.println(Y1);
                 }
                 ///System.err.println(X1);
                 //System.err.println(Y1);
@@ -52,6 +53,8 @@ class Player {
             resetPossibleMoves();
             checkPossibleMoves();
             System.out.println(getMove()); // A single line with UP, DOWN, LEFT or RIGHT
+            long processingTime = (System.currentTimeMillis() - startTime) % 1000;
+            System.err.println(processingTime);
         }
     }
 
@@ -119,3 +122,4 @@ class Player {
         return result;
     }
 }
+
