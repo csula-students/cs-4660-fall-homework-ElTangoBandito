@@ -121,5 +121,31 @@ class Player {
         }
         return result;
     }
+
+
+    public class Node{
+        public int x;
+        public int y;
+        public int cost;
+
+        public Node(int xIn, int yIn){
+            x = xIn;
+            y = yIn;
+            cost = 0;
+        }
+
+        public int getX(){
+            return x;
+        }
+        public int getY(){
+            return y;
+        }
+        public int getCost(){
+            return cost;
+        }
+        public void setCost(int newCost){
+            cost = newCost;
+        }
+    }
 }
 
