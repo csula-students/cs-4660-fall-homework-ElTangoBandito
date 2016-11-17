@@ -11,6 +11,7 @@ import java.math.*;
 class Player {
     private static long startTime;
     private static int[][] board = new int[30][20];
+    private static Node[][] nodeBoard = new Node[30][20];
     private static int myCurX;
     private static int myCurY;
     private static boolean goLeft = true;
@@ -21,10 +22,24 @@ class Player {
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
 
-        for (int [] row: board){
-            Arrays.fill(row, -1);
-        }
+        startTime = System.currentTimeMillis();
+
+        initializeBoardData();
+
+        /*
+        //Testing spaceFill method
+        //I think it works!
+        List<Node> testList = new ArrayList<Node>();
+        testList.add(nodeBoard[5][13]);
+        testList.add(nodeBoard[4][12]);
+        testList.add(nodeBoard[6][12]);
+        spaceFill(testList, nodeBoard[5][12]);
+
+        long processingTime = (System.currentTimeMillis() - startTime) % 1000;
+        System.err.println(processingTime);
+        */
         // game loop
+        /*
         while (true) {
             startTime = System.currentTimeMillis();
             int N = in.nextInt(); // total number of players (2 to 4).
@@ -55,6 +70,90 @@ class Player {
             System.out.println(getMove()); // A single line with UP, DOWN, LEFT or RIGHT
             long processingTime = (System.currentTimeMillis() - startTime) % 1000;
             System.err.println(processingTime);
+        }
+        */
+    }
+
+    public static int spaceFill(List<Node> nodeList, Node playersNode){
+        int[][] tempBoard = board;
+
+        List<Queue<Node>> allQueues = new ArrayList<Queue<Node>>();
+        for (Node n: nodeList){
+            Queue<Node> q = new LinkedList<Node>();
+            q.add(n);
+            allQueues.add(q);
+        }
+
+        Queue<Node> playersQueue = new LinkedList<Node>();
+        playersQueue.add(playersNode);
+
+        int cost = -1;
+
+        while (!playersQueue.isEmpty()){
+            for (Queue<Node> queue : allQueues){
+                if(!queue.isEmpty()){
+                    Node currentNode = queue.poll();
+                    if(tempBoard[currentNode.getX()][currentNode.getY()] != 10) {
+                        tempBoard[currentNode.getX()][currentNode.getY()] = 10;
+                        List<Node> neighboringNode = currentNode.getNeighbors();
+                        for (Node possibleMoves : neighboringNode) {
+                            if (tempBoard[possibleMoves.getX()][possibleMoves.getY()] == -1) {
+                                queue.add(nodeBoard[possibleMoves.getX()][possibleMoves.getY()]);
+                            }
+                        }
+                    }
+                }
+            }
+            Node currentNode = playersQueue.poll();
+            if(tempBoard[currentNode.getX()][currentNode.getY()] != 10) {
+                cost++;
+                tempBoard[currentNode.getX()][currentNode.getY()] = 10;
+                for (Node possibleMoves : currentNode.getNeighbors()) {
+                    if (tempBoard[possibleMoves.getX()][possibleMoves.getY()] == -1) {
+                        playersQueue.add(nodeBoard[possibleMoves.getX()][possibleMoves.getY()]);
+                    }
+                }
+            }
+
+        }
+        System.out.println(cost);
+        return cost;
+    }
+
+    public static void initializeBoardData(){
+        for (int [] row: board){
+            Arrays.fill(row, -1);
+        }
+        for (int row = 0; row < 30; row++){
+            for (int col = 0; col < 20; col++){
+                nodeBoard[row][col] = new Node(row, col);
+            }
+        }
+
+        for (int row = 0; row < 30; row++){
+            for (int col = 0; col < 20; col++){
+                List<Node> neighbors = new ArrayList<Node>();
+                if (row != 0){
+                    //node above
+                    neighbors.add(nodeBoard[row - 1][col]);
+                }
+
+                if (col != 19){
+                    //node Right
+                    neighbors.add(nodeBoard[row][col + 1]);
+                }
+
+                if (row != 29){
+                    //node down
+                    neighbors.add(nodeBoard[row + 1][col]);
+                }
+                if (col != 0){
+                    //node left
+                    neighbors.add(nodeBoard[row][col - 1]);
+                }
+
+                nodeBoard[row][col].setNeighbors(neighbors);
+            }
         }
     }
 
@@ -123,10 +222,11 @@ class Player {
     }
 
 
-    public class Node{
+    public static class Node{
         public int x;
         public int y;
         public int cost;
+        public List<Node> neighbors;
 
         public Node(int xIn, int yIn){
             x = xIn;
@@ -145,6 +245,12 @@ class Player {
         }
         public void setCost(int newCost){
             cost = newCost;
+        }
+        public void setNeighbors(List<Node> listIn){
+            neighbors = listIn;
+        }
+        public List<Node> getNeighbors(){
+            return neighbors;
         }
     }
 }
