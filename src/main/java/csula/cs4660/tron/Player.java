@@ -25,6 +25,7 @@ class Player {
     private static boolean playerThreeStart = true;
     private static boolean playerFourStart = true;
 
+    private static boolean tooCloseForComfort = false;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
@@ -36,27 +37,38 @@ class Player {
         statusMap.put(1, true);
         statusMap.put(2, true);
         statusMap.put(3, true);
+
+
         //Testing spaceFill method
         //I think it works!
-
         /*
         List<Node> testList = new ArrayList<Node>();
         testList.add(nodeBoard[5][13]);
         testList.add(nodeBoard[4][12]);
         testList.add(nodeBoard[6][12]);
-        findFloodFillMoves(testList, nodeBoard[4][13]);
+        board[5][13] = 2;
+        board[6][12] = 2;
+        board[4][12] = 2;
+        setFloodFillCosts(testList, nodeBoard[5][12], board);
+        miniMax(nodeBoard[5][12], 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         checkPossibleMoves();
+        performMovesBasedOnCost(nodeBoard[5][12]);
+
+        /*
         if(goLeft || goRight || goDown || goUp){
             performMovesBasedOnCost(nodeBoard[4][13]);
         }
 
-        */
+
+
         //spaceFill(testList, nodeBoard[5][12]);
 
-        //long processingTime = (System.currentTimeMillis() - startTime) % 1000;
-        //System.err.println(processingTime);
-
+        long processingTime = (System.currentTimeMillis() - startTime) % 1000;
+        System.err.println(processingTime);
+        */
         // game loop
+
+
 
         while (true) {
             startTime = System.currentTimeMillis();
@@ -106,19 +118,57 @@ class Player {
                     }
                 }
             }
-            findFloodFillMoves(enemyCurrentLocation, playerCurrentNode);
+            //findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+            //System.err.println(isWalledOff(enemyCurrentLocation, playerCurrentNode));
+            System.err.print("Player current location: " + myCurX + " " + myCurY);
+            clearNodeCosts();
+            resetPossibleMoves();
             checkPossibleMoves();
-            System.err.println(isWalledOff(enemyCurrentLocation, playerCurrentNode));
+            if(!isWalledOff(enemyCurrentLocation, playerCurrentNode)) {
+                if (goLeft || goRight || goDown || goUp) {
+                    int numberOfMoves = 0;
+                    if (goLeft) {
+                        numberOfMoves++;
+                    }
+                    if (goRight) {
+                        numberOfMoves++;
+                    }
+                    if (goUp) {
+                        numberOfMoves++;
+                    }
+                    if (goDown) {
+                        numberOfMoves++;
+                    }
+                    if (numberOfMoves > 1) {
+                        checkIfClose(enemyCurrentLocation, playerCurrentNode);
+                        if(tooCloseForComfort){
+                            System.err.println("Minimax!!");
+                            setFloodFillCosts(enemyCurrentLocation, playerCurrentNode, board);
+                            miniMax(playerCurrentNode, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+                            performMovesBasedOnCost(playerCurrentNode);
+                            tooCloseForComfort = false;
+                        }
+                        else{
+                            System.err.println("Aggressive mode!");
+                            findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+                            performMovesBasedOnCost(playerCurrentNode);
 
-            if(goLeft || goRight || goDown || goUp){
-                System.err.println("Making Flood Fill Move");
-                performMovesBasedOnCost(playerCurrentNode);
-                resetPossibleMoves();
+                            //TODO; AGGRESSIVE ALGORITHM
+                        }
+                    } else {
+                        System.err.println("Only one move available.");
+                        System.out.println(getMove());
+                        //findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+                    }
+                } else {
+                    System.err.println("Using random move");
+                    System.out.println(getMove());
+                }
             }
             else{
-                System.err.println("Using random move");
-                resetPossibleMoves();
-                checkPossibleMoves();
+                System.err.println("Survival mode!");
+                findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+                performMovesBasedOnCost(playerCurrentNode);
             }
             long processingTime = (System.currentTimeMillis() - startTime) % 1000;
             System.err.println(processingTime);
@@ -131,6 +181,18 @@ class Player {
 
         }
 
+
+
+    }
+
+    public static void checkIfClose(List<Node> enemyList, Node playerPos){
+        for(Node node : enemyList){
+            if(node.getX() >= playerPos.getX() - 3 && node.getX() <= playerPos.getX() + 3){
+                if(node.getY() >= playerPos.getY() - 3 && node.getY() <= playerPos.getY() + 3){
+                    tooCloseForComfort = true;
+                }
+            }
+        }
     }
 
     public static void clearDeadSpaces(int playerNumber){
@@ -145,9 +207,12 @@ class Player {
 
     public static void performMovesBasedOnCost(Node playerNode){
         List<Node> neighbors = playerNode.getNeighbors();
-        Node maxNode = neighbors.get(0);
+        Node maxNode = nodeBoard[neighbors.get(0).getX()][neighbors.get(0).getY()];
         for(Node node: neighbors){
-            if(node.getCost() > maxNode.getCost()){
+            System.err.print(node.getX() + ", " + node.getY() + ": " + nodeBoard[node.getX()][node.getY()].getCost());
+            System.err.println();
+            System.err.println("Current max cost: " + maxNode.getCost());
+            if(nodeBoard[node.getX()][node.getY()].getCost() > maxNode.getCost()){
                 maxNode = node;
             }
         }
@@ -188,10 +253,124 @@ class Player {
         return newBoard;
     }
 
-    public static void findFloodFillMoves(List<Node> nodeList, Node playersNode){
-        clearNodeCosts();
-        int[][] tempBoard = copyBoard(board);
-        int[][] futureChildrenBoard = copyBoard(board);
+    public static int miniMax(Node root, Integer depth, Integer alpha, Integer beta, Boolean max){
+        if(depth == 0){
+            //System.err.println(nodeBoard[root.getX()][root.getY()].getCost());
+            return nodeBoard[root.getX()][root.getY()].getCost();
+        }
+        else{
+            if(max){
+                List<Node> validChildrens = new ArrayList<Node>();
+                for(Node node : root.getNeighbors()){
+                    if (board[node.getX()][node.getY()] == -1 && depth == 2){
+                        validChildrens.add(node);
+                    }
+                }
+                int bestValue = Integer.MIN_VALUE;
+                if(validChildrens.isEmpty()){
+                    bestValue = 1;
+                }
+                for (Node node : validChildrens) {
+                    int currentDepth = depth - 1;
+                    int nextValue = miniMax(nodeBoard[node.getX()][node.getY()], currentDepth, alpha, beta, false);
+                    bestValue = Math.max(bestValue, nextValue);
+                    alpha = Math.max(alpha, bestValue);
+                    if (beta <= alpha){
+                        break;
+                    }
+                }
+                root.setCost(bestValue);
+                return bestValue;
+            }else{
+                List<Node> validChildrens = new ArrayList<Node>();
+                for(Node node : root.getNeighbors()){
+                    if (nodeBoard[node.getX()][node.getY()].getCost() != 0 && depth == 1 && board[node.getX()][node.getY()] == -1){
+                        validChildrens.add(node);
+                    }
+                }
+                int bestValue = Integer.MAX_VALUE;
+                if(validChildrens.isEmpty()){
+                    bestValue = 1;
+                }
+                for (Node node : validChildrens) {
+                    int currentDepth = depth - 1;
+                    int nextValue = miniMax(nodeBoard[node.getX()][node.getY()], currentDepth, alpha, beta, true);
+                    bestValue = Math.min(bestValue, nextValue);
+                    alpha = Math.min(alpha, bestValue);
+                    if (beta <= alpha){
+                        break;
+                    }
+                }
+                //System.err.println("Minimum value: " + bestValue);
+                root.setCost(bestValue);
+                return bestValue;
+            }
+        }
+    }
+
+    public static void setFloodFillCosts(List<Node> nodeList, Node playersNode, int[][] boardIn){
+        int[][] tempBoard = copyBoard(boardIn);
+        int[][] futureChildrenBoard = copyBoard(boardIn);
+
+        List<Queue<Node>> allQueues = new ArrayList<Queue<Node>>();
+        if (!nodeList.isEmpty()) {
+            for (Node n : nodeList) {
+                Queue<Node> q = new LinkedList<Node>();
+                tempBoard[n.getX()][n.getY()] = 10;
+                for (Node childrenNode : n.getNeighbors()) {
+                    if (tempBoard[childrenNode.getX()][childrenNode.getY()] == -1) {
+                        q.add(childrenNode);
+                        //put children nodes into queue if they are not already occupied
+                    }
+                }
+                allQueues.add(q);
+            }
+        }
+
+        Queue<Node> playersQueue = new LinkedList<Node>();
+        for (Node childrenNode : playersNode.getNeighbors()){
+            if(tempBoard[childrenNode.getX()][childrenNode.getY()] == -1){
+                playersQueue.add(childrenNode);
+            }
+        }
+
+
+        Queue<Node> playerNextNode = new LinkedList<Node>();
+        while (!playersQueue.isEmpty()){
+            List<Node> enemyNodes = new ArrayList<Node>();
+            for (Queue<Node> queue : allQueues){
+                if(!queue.isEmpty()){
+                    Node currentNode = queue.poll();
+                    while(futureChildrenBoard[currentNode.getX()][currentNode.getY()] != -1 && !queue.isEmpty()){
+                        currentNode = queue.poll();
+                    }
+                    if(futureChildrenBoard[currentNode.getX()][currentNode.getY()] == -1) {
+                        futureChildrenBoard[currentNode.getX()][currentNode.getY()] = 10;
+                        enemyNodes.add(currentNode);
+                    }
+                }
+            }
+            Node currentNode = playersQueue.poll();
+            while(futureChildrenBoard[currentNode.getX()][currentNode.getY()] != -1 && !playersQueue.isEmpty()){
+                currentNode = playersQueue.poll();
+            }
+            if(futureChildrenBoard[currentNode.getX()][currentNode.getY()] == -1) {
+                futureChildrenBoard[currentNode.getX()][currentNode.getY()] = 10;
+                playerNextNode.add(currentNode);
+            }
+
+            if(!playerNextNode.isEmpty()){
+                findFloodFillMoves(enemyNodes, playerNextNode.poll(), tempBoard);
+            }
+
+        }
+
+
+    }
+
+    public static void findFloodFillMoves(List<Node> nodeList, Node playersNode, int[][] boardIn){
+        int[][] tempBoard = copyBoard(boardIn);
+        int[][] futureChildrenBoard = copyBoard(boardIn);
 
         List<Queue<Node>> allQueues = new ArrayList<Queue<Node>>();
         if (!nodeList.isEmpty()) {
@@ -294,9 +473,9 @@ class Player {
 
         }
 
-        System.err.print(playersNode.getX() + " ");
-        System.err.print(playersNode.getY() + " ");
-        System.err.println(cost);
+        //System.err.print(playersNode.getX() + " ");
+        //System.err.print(playersNode.getY() + " ");
+        //System.err.println(cost);
         nodeBoard [playersNode.getX()][playersNode.getY()].setCost(cost);
         return cost;
     }
