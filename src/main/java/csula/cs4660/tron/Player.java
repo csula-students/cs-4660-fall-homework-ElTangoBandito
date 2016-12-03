@@ -167,8 +167,11 @@ class Player {
             }
             else{
                 System.err.println("Survival mode!");
-                findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+                setFloodFillCosts(enemyCurrentLocation, playerCurrentNode, board);
+                miniMax(playerCurrentNode, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
                 performMovesBasedOnCost(playerCurrentNode);
+                //findFloodFillMoves(enemyCurrentLocation, playerCurrentNode, board);
+                //performMovesBasedOnCost(playerCurrentNode);
             }
             long processingTime = (System.currentTimeMillis() - startTime) % 1000;
             System.err.println(processingTime);
@@ -216,21 +219,24 @@ class Player {
                 maxNode = node;
             }
         }
+        if(maxNode.getCost() == 0){
+            System.out.println(getMove());
+        }else {
+            int maxX = maxNode.getX();
+            int maxY = maxNode.getY();
 
-        int maxX = maxNode.getX();
-        int maxY = maxNode.getY();
-
-        if(maxX > playerNode.getX()){
-            System.out.println("RIGHT");
-        }
-        if(maxX < playerNode.getX()){
-            System.out.println("LEFT");
-        }
-        if(maxY > playerNode.getY()){
-            System.out.println("DOWN");
-        }
-        if(maxY < playerNode.getY()){
-            System.out.println("UP");
+            if (maxX > playerNode.getX()) {
+                System.out.println("RIGHT");
+            }
+            if (maxX < playerNode.getX()) {
+                System.out.println("LEFT");
+            }
+            if (maxY > playerNode.getY()) {
+                System.out.println("DOWN");
+            }
+            if (maxY < playerNode.getY()) {
+                System.out.println("UP");
+            }
         }
 
     }
